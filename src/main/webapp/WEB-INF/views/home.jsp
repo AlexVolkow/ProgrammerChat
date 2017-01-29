@@ -13,7 +13,7 @@
 			<div class="message">
 				<pre class="text">
 				<h2>			 Programmer's chat</h2>
-Welcome <font style="color: #ae81ff;"><c:out value="${login}"/></font> to programmer's chat, a minimal, distraction-free chat application.
+Welcome <font style="color: #ae81ff;">${pageContext.request.userPrincipal.name}</font> to programmer's chat, a minimal, distraction-free chat application.
 
 <form method="POST" action="/chat">
 Create chanel:<input type="text" id="chatform" class="messages" name="newChanel" style="width:50%;">     <button type="submit" style="width: 15%">Create</button>

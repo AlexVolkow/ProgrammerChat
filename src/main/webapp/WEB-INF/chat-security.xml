@@ -1,0 +1,30 @@
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+    http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd">
+    <http auto-config="true" use-expressions="false">
+        <intercept-url pattern="/" access="ROLE_ANONYMOUS"/>
+        <intercept-url pattern="/home/**" access="ROLE_USER"/>
+        <intercept-url pattern="/signup" access="ROLE_ANONYMOUS"/>
+        <intercept-url pattern="/signup/success" access="ROLE_ANONYMOUS"/>
+        <logout logout-url="/logout" logout-success-url="/"/>
+        <remember-me/>
+        <form-login login-page="/" username-parameter="j_username"
+                    password-parameter="j_password"
+                    login-processing-url="/j_spring_security_check"
+                    authentication-failure-url="/?login_error=1" default-target-url="/home"/>
+    </http>
+    <authentication-manager>
+        <authentication-provider>
+            <user-service>
+                <user name="admin" password="password" authorities="ROLE_ADMIN,ROLE_USER"/>
+            </user-service>
+        </authentication-provider>
+        <authentication-provider user-service-ref="accountService" >
+            <password-encoder hash="md5" />
+        </authentication-provider>
+    </authentication-manager>
+    <global-method-security secured-annotations="enabled" />
+
+</beans:beans>

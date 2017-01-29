@@ -29,7 +29,8 @@ Password:<form:input path="password" type="password" id="chatform" class="messag
 
 		 <button type="submit" style="width: 15%">Sign up</button>
     </fieldset>
-</form:form></pre>
+</form:form>
+<a href = "/">back to home</a></pre>
         </div>
     </div>
 </article>

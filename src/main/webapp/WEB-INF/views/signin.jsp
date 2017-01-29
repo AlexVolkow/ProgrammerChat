@@ -16,12 +16,14 @@
 		<div id="messages" class="messages">
 			<div class="message">
 				<pre class="text">
-				<h2>			 Programmer's chat</h2>
+				<h2>        Programmer's chat</h2>
 Join in chat:
-<form method="POST" action="/signin">
-   Email:<input type="text" id="chatform" class="messages" name="email" style="width:50%;">
+<form role="form" method="POST" action="<c:url value="/j_spring_security_check"/>"><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+      Email:<input type="text" id="chatform" class="messages" name="j_username" style="width:50%;">
 
-Password:<input type="password" id="chatform" class="messages" name="password" style="width:50%;">
+   Password:<input type="password" id="chatform" class="messages" name="j_password" style="width:50%;">
+
+Remember me: <input name="_spring_security_remember_me" type="checkbox"/>
 
 		 <button type="submit" style="width: 15%">Sign in</button>
 
@@ -32,7 +34,7 @@ Password:<input type="password" id="chatform" class="messages" name="password" s
 			<div class="message info">
 			<span class="nick">*</span>
 			<pre class="text"><c:set var="total" value="${fn:length(online)}" />
-User online: <c:forEach items="${online}" var="user" varStatus="counter"><c:out value="${user.login}"/><c:if test="${counter.count < total}">, </c:if></c:forEach>
+Users online: <c:forEach items="${online}" var="user" varStatus="counter"><c:out value="${user.login}"/><c:if test="${counter.count < total}">, </c:if></c:forEach>
 			</pre>
 			</div>
 		</div>

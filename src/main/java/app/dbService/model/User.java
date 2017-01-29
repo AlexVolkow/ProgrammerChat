@@ -24,7 +24,7 @@ public class User {
     private String login;
 
     @Column(name = "password")
-    @Size(min=6,max=20,message = "The password must be at least 6 characters long.")
+    @Size(min=6,max=35,message = "The password must be between 6 and 35 characters long.")
     @NotNull
     private String password;
 

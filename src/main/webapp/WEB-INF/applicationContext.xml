@@ -9,4 +9,5 @@
     <mvc:annotation-driven />
 
     <import resource="spring-hibernate.xml" />
+    <import resource="chat-security.xml"/>
 </beans>

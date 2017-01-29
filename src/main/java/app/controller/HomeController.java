@@ -12,9 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 @RequestMapping("/home")
 public class HomeController {
-    @RequestMapping(value = "/{login}",method = RequestMethod.GET)
-    public String showHomePage(@PathVariable(value = "login") String login, Model model){
-        model.addAttribute("login",login);
+    @RequestMapping(method = RequestMethod.GET)
+    public String showHomePage(Model model){
         return "home";
     }
 }
