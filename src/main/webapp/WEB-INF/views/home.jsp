@@ -15,10 +15,22 @@
 				<h2>			 Programmer's chat</h2>
 Welcome <font style="color: #ae81ff;">${pageContext.request.userPrincipal.name}</font> to programmer's chat, a minimal, distraction-free chat application.
 
-<form method="POST" action="/chat">
+<form method="POST" action="/chat/create">
 Create chanel:<input type="text" id="chatform" class="messages" name="newChanel" style="width:50%;">     <button type="submit" style="width: 15%">Create</button>
 </form>
 Chanel list:
+<table>
+<c:forEach items="${rooms}" var="entry">
+<tr>
+	<td>
+		<a href="/chat/<c:out value='${entry.key.name}'/>"><c:out value='${entry.key.name}'/></a>
+	</td>
+	<td>
+		<c:out value="${entry.value}"/>
+	</td>
+</tr>
+</c:forEach>
+</table>
 				</pre>
 			</div>
 		</div>

@@ -12,14 +12,15 @@ public class Room {
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "id")
     private long id;
+
     @Column(name = "name")
     private String name;
+
     @Column(name = "owner_id")
     private long ownerId;
 
-    public Room(){
+    public Room(){}
 
-    }
     public long getId() {
         return id;
     }
@@ -44,8 +45,36 @@ public class Room {
         this.ownerId = ownerId;
     }
 
-    public Room(long id, String name, long ownerId) {
-        this.id = id;
+    @Override
+    public String toString() {
+        return "Room{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", ownerId=" + ownerId +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Room)) return false;
+
+        Room room = (Room) o;
+
+        if (id != room.id) return false;
+        if (ownerId != room.ownerId) return false;
+        return name != null ? name.equals(room.name) : room.name == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (int) (ownerId ^ (ownerId >>> 32));
+        return result;
+    }
+
+    public Room(String name, long ownerId) {
         this.name = name;
         this.ownerId = ownerId;
     }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,7 +36,6 @@ public class RoomDAO {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-
     public void delete(Room room){
         currentSession().delete(room);
     }
@@ -50,6 +50,11 @@ public class RoomDAO {
     }
 
     public List<Room> getAll(){
-        return (List<Room>) currentSession().createQuery("from Room as r order by r.date").list();
+        List<Object> list = currentSession().createQuery("from Room").list();
+        List<Room> res = new ArrayList<>();
+        for (Object obj : list){
+            res.add((Room) obj);
+        }
+        return res;
     }
 }

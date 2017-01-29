@@ -18,6 +18,7 @@ public interface DBService {
 
     long addRoom(Room room);
     void deleteRoom(Room room);
+    Room getRoomByName(String name);
     List<Room> allRooms();
 
     void addMessage(User user, Room room, Date date, String text);

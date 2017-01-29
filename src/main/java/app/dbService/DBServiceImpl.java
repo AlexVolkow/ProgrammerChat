@@ -22,6 +22,12 @@ public class DBServiceImpl implements DBService {
         return ourInstance;
     }
 
+    @Override
+    public Room getRoomByName(String name) {
+        RoomDAO roomDAO = (RoomDAO) context.getBean("roomDAO");
+        return roomDAO.getByName(name);
+    }
+
     private DBServiceImpl() {
         context = new FileSystemXmlApplicationContext("src/main/webapp/WEB-INF/spring-hibernate.xml");
     }

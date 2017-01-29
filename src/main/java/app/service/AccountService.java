@@ -3,6 +3,7 @@ package app.service;
 import app.dbService.DBService;
 import app.dbService.DBServiceImpl;
 import app.dbService.model.User;
+import app.service.exception.AccountAlreadyRegistered;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,9 +38,12 @@ public class AccountService implements UserDetailsService{
         return res;
     }
 
-    public void addNewUser(User user) {
+    public void addNewUser(User user) throws AccountAlreadyRegistered {
         String hash = DigestUtils.md5Hex(user.getPassword());
         user.setPassword(hash);
+        if (dbService.getUserByEmail(user.getEmail())!=null || dbService.getUserByLogin(user.getLogin())!=null){
+            throw new AccountAlreadyRegistered("Account: "+user+" is already registered");
+        }
         dbService.addUser(user);
     }
 

@@ -9,7 +9,7 @@
         <intercept-url pattern="/signup" access="ROLE_ANONYMOUS"/>
         <intercept-url pattern="/signup/success" access="ROLE_ANONYMOUS"/>
         <logout logout-url="/logout" logout-success-url="/"/>
-        <remember-me/>
+        <remember-me user-service-ref="accountService"/>
         <form-login login-page="/" username-parameter="j_username"
                     password-parameter="j_password"
                     login-processing-url="/j_spring_security_check"
