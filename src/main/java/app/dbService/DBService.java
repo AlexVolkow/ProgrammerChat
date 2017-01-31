@@ -1,7 +1,6 @@
 package app.dbService;
 
 import app.dbService.model.Message;
-import app.dbService.model.Room;
 import app.dbService.model.User;
 
 import java.util.Date;
@@ -15,12 +14,8 @@ public interface DBService {
     void deleteUser(User user);
     User getUserByLogin(String login);
     User getUserByEmail(String email);
+    User getUserById(long id);
 
-    long addRoom(Room room);
-    void deleteRoom(Room room);
-    Room getRoomByName(String name);
-    List<Room> allRooms();
-
-    void addMessage(User user, Room room, Date date, String text);
-    List<Message> getMessageByRoom(Room room);
+    void addMessage(User user, Date date, String text);
+    List<Message> getMessages();
 }

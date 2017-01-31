@@ -1,13 +1,12 @@
 package app.dbService;
 
 import app.dbService.dao.MessageDAO;
-import app.dbService.dao.RoomDAO;
 import app.dbService.dao.UserDAO;
 import app.dbService.model.Message;
-import app.dbService.model.Room;
 import app.dbService.model.User;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
+
 import java.util.Date;
 import java.util.List;
 
@@ -16,76 +15,56 @@ import java.util.List;
  */
 public class DBServiceImpl implements DBService {
     private static DBServiceImpl ourInstance = new DBServiceImpl();
-    private ApplicationContext context;
+    private UserDAO userDAO;
+    private MessageDAO messageDAO;
 
     public static DBServiceImpl instance() {
         return ourInstance;
     }
 
-    @Override
-    public Room getRoomByName(String name) {
-        RoomDAO roomDAO = (RoomDAO) context.getBean("roomDAO");
-        return roomDAO.getByName(name);
-    }
 
     private DBServiceImpl() {
-        context = new FileSystemXmlApplicationContext("src/main/webapp/WEB-INF/spring-hibernate.xml");
+        ApplicationContext context =
+                new FileSystemXmlApplicationContext("src/main/webapp/WEB-INF/spring-hibernate.xml");
+        messageDAO = (MessageDAO) context.getBean("messageDAO");
+        userDAO = (UserDAO) context.getBean("userDAO");
     }
 
     @Override
     public long addUser(User user) {
-        UserDAO userDAO = (UserDAO)context.getBean("userDAO");
         userDAO.insert(user);
         return userDAO.getByEmail(user.getEmail()).getId();
     }
 
     @Override
     public User getUserByLogin(String login) {
-        UserDAO userDAO = (UserDAO)context.getBean("userDAO");
         return userDAO.getByLogin(login);
     }
 
     @Override
     public User getUserByEmail(String email) {
-        UserDAO userDAO = (UserDAO)context.getBean("userDAO");
         return userDAO.getByEmail(email);
     }
 
     @Override
     public void deleteUser(User user) {
-        UserDAO userDAO = (UserDAO)context.getBean("userDAO");
         userDAO.delete(user);
     }
 
     @Override
-    public long addRoom(Room room) {
-        RoomDAO roomDAO = (RoomDAO) context.getBean("roomDAO");
-        roomDAO.insert(room);
-        return roomDAO.getByName(room.getName()).getId();
-    }
-
-    @Override
-    public void deleteRoom(Room room) {
-        RoomDAO roomDAO = (RoomDAO) context.getBean("roomDAO");
-        roomDAO.delete(room);
-    }
-
-    @Override
-    public List<Room> allRooms() {
-        RoomDAO roomDAO = (RoomDAO) context.getBean("roomDAO");
-        return roomDAO.getAll();
-    }
-
-    @Override
-    public void addMessage(User user, Room room, Date date, String text) {
-        MessageDAO messageDAO = (MessageDAO) context.getBean("messageDAO");
-        Message message = new Message(user.getId(),room.getId(),date,text);
+    public void addMessage(User user, Date date, String text) {
+        Message message = new Message(user.getId(),date,text);
         messageDAO.insert(message);
     }
 
     @Override
-    public List<Message> getMessageByRoom(Room room) {
-        MessageDAO messageDAO = (MessageDAO) context.getBean("messageDAO");
-        return messageDAO.getMessageByRoomId(room.getId());
+    public User getUserById(long id) {
+        return userDAO.get(id);
     }
+
+    @Override
+    public List<Message> getMessages() {
+        return messageDAO.getMessages();
+    }
+
 }

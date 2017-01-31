@@ -7,7 +7,6 @@
     <context:annotation-config />
     <context:component-scan base-package="app" />
     <mvc:annotation-driven />
-
     <import resource="spring-hibernate.xml" />
     <import resource="chat-security.xml"/>
 </beans>

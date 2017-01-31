@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
 
 
 import java.util.*;
@@ -21,12 +20,17 @@ import java.util.*;
 @Service
 public class AccountService implements UserDetailsService{
     private DBService dbService;
+    private static AccountService accountService = new AccountService();
+
+    public static AccountService instance(){
+        return accountService;
+    }
 
     private static final SimpleGrantedAuthority[] ROLE_USER = {new SimpleGrantedAuthority("ROLE_USER")};
 
     private Map<String,User> sessionIdToProfile = new HashMap<>();
 
-    public AccountService() {
+    private AccountService() {
         dbService = DBServiceImpl.instance();
     }
 
@@ -36,6 +40,10 @@ public class AccountService implements UserDetailsService{
             res.add(sessionIdToProfile.get(sessionId));
         }
         return res;
+    }
+
+    public User getUser(long id){
+        return dbService.getUserById(id);
     }
 
     public void addNewUser(User user) throws AccountAlreadyRegistered {
@@ -53,7 +61,6 @@ public class AccountService implements UserDetailsService{
         if (user==null){
             throw new UsernameNotFoundException("User by email = "+s+" is not found");
         }
-        sessionIdToProfile.put(RequestContextHolder.currentRequestAttributes().getSessionId(),user);
         return new org.springframework.security.core.userdetails.User(user.getLogin(),user.getPassword(),
                 true,true,true,true, Arrays.asList(ROLE_USER));
     }
@@ -66,10 +73,18 @@ public class AccountService implements UserDetailsService{
         sessionIdToProfile.remove(sessionId);
     }
 
+    public void addSession(String sessionId,User user){
+        sessionIdToProfile.put(sessionId,user);
+    }
+
     public User getUserByLogin(String login){
         return dbService.getUserByLogin(login);
     }
     public User getUserByEmail(String email){
         return dbService.getUserByEmail(email);
+    }
+
+    public User getUserBySessionId(String sessionId){
+        return sessionIdToProfile.get(sessionId);
     }
 }

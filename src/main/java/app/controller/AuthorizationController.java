@@ -19,13 +19,12 @@ import javax.validation.Valid;
 public class AuthorizationController {
     public static final int ONLINE_USER_LIMIT = 30;
 
-    @Autowired
-    private AccountService accountService;
+    private AccountService accountService = AccountService.instance();
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String showSignInPage(Model model){
         if (accountService.isEnter(RequestContextHolder.currentRequestAttributes().getSessionId())){
-            return "redirect:/home";
+            return "redirect:/chat";
         }
         model.addAttribute("online",accountService.getOnlineUser(ONLINE_USER_LIMIT));
         return "signin";
@@ -36,10 +35,12 @@ public class AuthorizationController {
         model.addAttribute(new User());
         return "signup";
     }
+
     @RequestMapping(value = "/signup/success", method = RequestMethod.GET)
     public String registrationSuccessful(Model model){
         return "complete";
     }
+
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public String addNewUser(@Valid User user, BindingResult bindingResult){
 

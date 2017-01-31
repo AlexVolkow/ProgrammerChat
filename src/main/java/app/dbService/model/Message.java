@@ -1,5 +1,7 @@
 package app.dbService.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -15,9 +17,8 @@ public class Message {
     private long id;
     @Column(name = "user_id")
     private long userId;
-    @Column(name = "room_id")
-    private long roomId;
     @Column(name = "date")
+    @DateTimeFormat(pattern = "HH:mm dd-MM-yyy")
     private Date date;
     @Column(name = "text")
     private String text;
@@ -41,16 +42,18 @@ public class Message {
         this.userId = userId;
     }
 
-    public long getRoomId() {
-        return roomId;
-    }
-
-    public void setRoomId(long roomId) {
-        this.roomId = roomId;
-    }
-
     public Date getDate() {
         return date;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", date=" + date +
+                ", text='" + text + '\'' +
+                '}';
     }
 
     public void setDate(Date date) {
@@ -65,9 +68,8 @@ public class Message {
         this.text = text;
     }
 
-    public Message(long userId, long roomId, Date date, String text) {
+    public Message(long userId, Date date, String text) {
         this.userId = userId;
-        this.roomId = roomId;
         this.date = date;
         this.text = text;
     }

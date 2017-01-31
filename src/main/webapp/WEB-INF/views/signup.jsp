@@ -18,7 +18,7 @@
 				<h2>			 Programmer's chat</h2>
 Create a new account
 <form:form method="POST" modelAttribute="user"><fieldset>
-   Login:<form:input path="login" type="text" id="chatform" class="messages" name="email" style="width:50%;"/>
+   Login:<form:input path="login" type="text" id="chatform" class="messages" name="login" style="width:50%;"/>
 <font style="color:#f92672"><form:errors path="login" cssClass="error"/></font>
 
    Email:<form:input path="email" type="text" id="chatform" class="messages" name="email" style="width:50%;"/>

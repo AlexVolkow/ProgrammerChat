@@ -5,15 +5,15 @@
     http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd">
     <http auto-config="true" use-expressions="false">
         <intercept-url pattern="/" access="ROLE_ANONYMOUS"/>
-        <intercept-url pattern="/home/**" access="ROLE_USER"/>
         <intercept-url pattern="/signup" access="ROLE_ANONYMOUS"/>
         <intercept-url pattern="/signup/success" access="ROLE_ANONYMOUS"/>
+        <intercept-url pattern="/chat" access="ROLE_USER"/>
         <logout logout-url="/logout" logout-success-url="/"/>
         <remember-me user-service-ref="accountService"/>
         <form-login login-page="/" username-parameter="j_username"
                     password-parameter="j_password"
                     login-processing-url="/j_spring_security_check"
-                    authentication-failure-url="/?login_error=1" default-target-url="/home"/>
+                    authentication-failure-url="/?login_error=1" default-target-url="/chat"/>
     </http>
     <authentication-manager>
         <authentication-provider>

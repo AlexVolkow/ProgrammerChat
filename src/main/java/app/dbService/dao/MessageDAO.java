@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by alexa on 22.01.2017.
@@ -43,8 +44,15 @@ public class MessageDAO {
         return currentSession().get(Message.class,id);
     }
 
-    public List<Message> getMessageByRoomId(long roomId){
-        Criteria criteria = currentSession().createCriteria(Message.class);
-        return (List<Message>) criteria.add(Restrictions.eq("room_id",roomId)).list();
+    public List<Message> getMessages(){
+        List<Object> list = currentSession().createQuery("FROM Message").list();
+        List<Message> res = new ArrayList<>();
+        for (Object obj : list){
+            res.add((Message) obj);
+        }
+        return res;
+    }
+    public void dropTable(){
+        currentSession().clear();
     }
 }
