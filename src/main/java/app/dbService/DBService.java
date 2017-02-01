@@ -16,6 +16,6 @@ public interface DBService {
     User getUserByEmail(String email);
     User getUserById(long id);
 
-    void addMessage(User user, Date date, String text);
+    void addMessage(long userId, Date date, String text);
     List<Message> getMessages();
 }

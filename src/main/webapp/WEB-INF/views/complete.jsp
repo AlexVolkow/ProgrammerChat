@@ -12,7 +12,7 @@
     <div id="messages" class="messages">
         <div class="message">
 				<pre class="text">
-				<h2>			 Programmer's chat</h2>
+<h2>Programmer's chat</h2>
                 <h3>          Registration completed successfully.</h3>
 
                             <a href="/">Sign In</a>

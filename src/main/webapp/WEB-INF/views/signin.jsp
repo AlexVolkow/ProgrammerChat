@@ -10,15 +10,26 @@
 	<link rel="stylesheet" href="${mainCss}"/>
 	<link rel="stylesheet" href="${monokaiCss}" />
 	<title>Programmer's chat</title>
+	<script>
+		function init() {
+			if (window.location.search.toString().search("login_error") >=0 ){
+                var form = document.getElementById("form");
+				var newEl = document.createElement("font");
+				newEl.setAttribute("style","color:#f92672");
+				newEl.innerHTML = "There is no user with the specified parameters";
+				form.appendChild(newEl);
+            }
+        }
+	</script>
 </head>
-<body style="margin-bottom: 42px;">
+<body style="margin-bottom: 42px;" onload="init();">
 	<article class="container">
 		<div id="messages" class="messages">
 			<div class="message">
 				<pre class="text">
-				<h2>        Programmer's chat</h2>
+<h2>Programmer's chat</h2>
 Join in chat:
-<form role="form" method="POST" action="<c:url value="/j_spring_security_check"/>"><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+<form id ="form" role="form" method="POST" action="<c:url value="/j_spring_security_check"/>"><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
       Email:<input type="text" id="chatform" class="messages" name="j_username" style="width:50%;">
 
    Password:<input type="password" id="chatform" class="messages" name="j_password" style="width:50%;">

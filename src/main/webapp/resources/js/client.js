@@ -6,7 +6,7 @@ var ws;
 function init() {
     ws = new WebSocket("ws://localhost:8080/listen");
     ws.onopen = function (event) {
-        console.log(">>Open connection");
+        console.log(">> Open connection");
     }
     ws.onmessage = function (event) {
         var data = JSON.parse(event.data.toString());
@@ -17,7 +17,7 @@ function init() {
         showMessage(login,date,text,status);
     }
     ws.onclose = function (event) {
-        console.log("<<Close connection");
+        console.log("<< Close connection");
     }
 };
 function sendMessage() {
@@ -34,11 +34,14 @@ function showMessage(login, date, text, status) {
     if (status!="USER_MESSAGE"){
         msgStatus = "message info";
     }
+    if (status=="ME"){
+        msgStatus = "message me";
+    }
     var newMessage = document.createElement("div");
     newMessage.setAttribute("class",msgStatus);
         var nick = document.createElement("span");
         nick.setAttribute("class","nick");
-            if (msgStatus == "message info") {
+            if (msgStatus != "message info") {
                 var trip = document.createElement("span");
                 trip.setAttribute("class", "trip");
                 trip.innerHTML = date + " ";
@@ -53,4 +56,8 @@ function showMessage(login, date, text, status) {
     pre.innerHTML = text;
     newMessage.appendChild(pre);
     messages.appendChild(newMessage);
+}
+function deleteMessages() {
+    var messages = document.getElementById("messages");
+    messages.innerHTML = "";
 }

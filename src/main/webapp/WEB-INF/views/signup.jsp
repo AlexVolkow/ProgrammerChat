@@ -15,7 +15,7 @@
     <div id="messages" class="messages">
         <div class="message">
 				<pre class="text">
-				<h2>			 Programmer's chat</h2>
+<h2>Programmer's chat</h2>
 Create a new account
 <form:form method="POST" modelAttribute="user"><fieldset>
    Login:<form:input path="login" type="text" id="chatform" class="messages" name="login" style="width:50%;"/>

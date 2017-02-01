@@ -52,8 +52,8 @@ public class DBServiceImpl implements DBService {
     }
 
     @Override
-    public void addMessage(User user, Date date, String text) {
-        Message message = new Message(user.getId(),date,text);
+    public void addMessage(long userId, Date date, String text) {
+        Message message = new Message(userId,date,text);
         messageDAO.insert(message);
     }
 

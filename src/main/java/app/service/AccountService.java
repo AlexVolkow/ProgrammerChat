@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by alexa on 27.01.2017.
@@ -28,13 +29,13 @@ public class AccountService implements UserDetailsService{
 
     private static final SimpleGrantedAuthority[] ROLE_USER = {new SimpleGrantedAuthority("ROLE_USER")};
 
-    private Map<String,User> sessionIdToProfile = new HashMap<>();
+    private Map<String,User> sessionIdToProfile = new ConcurrentHashMap<>();
 
     private AccountService() {
         dbService = DBServiceImpl.instance();
     }
 
-    public List<User> getOnlineUser(int limit) {
+    public List<User> getOnlineUser() {
         List<User> res = new ArrayList<>();
         for (String sessionId : sessionIdToProfile.keySet()){
             res.add(sessionIdToProfile.get(sessionId));

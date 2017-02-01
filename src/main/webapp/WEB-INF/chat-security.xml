@@ -8,7 +8,6 @@
         <intercept-url pattern="/signup" access="ROLE_ANONYMOUS"/>
         <intercept-url pattern="/signup/success" access="ROLE_ANONYMOUS"/>
         <intercept-url pattern="/chat" access="ROLE_USER"/>
-        <logout logout-url="/logout" logout-success-url="/"/>
         <remember-me user-service-ref="accountService"/>
         <form-login login-page="/" username-parameter="j_username"
                     password-parameter="j_password"
