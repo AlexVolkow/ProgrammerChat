@@ -9,6 +9,7 @@ import app.dbService.model.Message;
 import app.dbService.model.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
@@ -23,6 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MessageService {
     private DBService dbService = DBServiceImpl.instance();
     private AccountService accountService = AccountService.instance();
+    private static final Logger logger = Logger.getLogger(MessageService.class);
     private Map<String, ChatWebSocket> webSockets;
 
     public MessageService() {
@@ -32,16 +34,19 @@ public class MessageService {
     public void sendMessage(ChatMessage chatMessage) {
         if (chatMessage.getStatus() == StatusMessage.USER_MESSAGE) {
             dbService.addMessage(chatMessage.getUserId(), chatMessage.getDate(), chatMessage.getText());
+            logger.info("Message "+chatMessage+" added to DB");
         }
         for (String sessionId : webSockets.keySet()) {
             User user = accountService.getUserBySessionId(sessionId);
             if (Filter.apply(user, chatMessage)) {
                 try {
+                    StatusMessage status = chatMessage.getStatus();
                     if (isMe(user,chatMessage)){
-                        chatMessage.setStatus(StatusMessage.ME);
+                        status = StatusMessage.ME;
                     }
                     String data =
-                            wrapJSON(chatMessage.getLogin(), chatMessage.getDate(), chatMessage.getText(), chatMessage.getStatus());
+                            wrapJSON(chatMessage.getLogin(), chatMessage.getDate(), chatMessage.getText(), status);
+                    logger.info("Message "+chatMessage+" sent");
                     webSockets.get(sessionId).sendString(data);
                 } catch (JsonProcessingException e) {
                     System.out.println(e.getMessage());
@@ -51,7 +56,7 @@ public class MessageService {
     }
 
     private boolean isMe(User user, ChatMessage message){
-        if (message.getStatus()==StatusMessage.USER_MESSAGE && user.getLogin().equals(message.getLogin())){
+        if (message.getStatus()!=StatusMessage.INFO && user.getLogin().equals(message.getLogin())){
             return true;
         }
         return false;
@@ -72,10 +77,12 @@ public class MessageService {
     }
 
     public void add(String sessionId, ChatWebSocket webSocket) {
+        logger.info("Connected websocket with session id = "+sessionId);
         webSockets.put(sessionId, webSocket);
     }
 
     public void remove(String sessionId) {
+        logger.info("Disabled websocket with session id = "+sessionId);
         webSockets.remove(sessionId);
     }
 }

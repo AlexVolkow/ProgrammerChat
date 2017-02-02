@@ -2,6 +2,7 @@ package app.controller;
 
 import app.dbService.model.User;
 import app.service.AccountService;
+import org.apache.log4j.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -22,6 +23,7 @@ import javax.validation.Valid;
 @Controller
 public class AuthorizationController {
     private AccountService accountService = AccountService.instance();
+    private final static Logger logger = Logger.getLogger(AuthorizationController.class);
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String showSignInPage(Model model){
@@ -47,13 +49,16 @@ public class AuthorizationController {
     public String addNewUser(@Valid User user, BindingResult bindingResult){
 
         if (bindingResult.hasErrors()){
+            logger.info("User "+user+" is not registered");
             return "signup";
         }
         if (accountService.getUserByLogin(user.getLogin())!=null){
+            logger.info("User "+user+" is not registered(login is already taken)");
             bindingResult.rejectValue("login","err_qna_not_blank","Login is already taken");
             return "signup";
         }
         if (accountService.getUserByEmail(user.getEmail())!=null){
+            logger.info("User "+user+" is not registered(email is already taken)");
             bindingResult.rejectValue("email","err_qna_not_blank","Email is already taken");
             return "signup";
         }

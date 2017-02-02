@@ -27,7 +27,7 @@
         <div class="message <c:if test="${message.status=='ME'}">me</c:if>">
             <span class="nick">
                 <span class="trip"><fmt:formatDate value="${message.date}" pattern="HH:mm dd-MM-yyy" type="date"/></span>
-                <a><c:out value="${message.login}"/></a>
+                <a onclick="directMessage('<c:out value='${message.login}'/>')"><c:out value="${message.login}"/></a>
             </span>
             <pre class="text"><c:out value="${message.text}"/></pre>
         </div>
@@ -49,7 +49,7 @@
         <p><h4>Users online</h4></p>
         <ul id="users">
             <c:forEach items="${online}" var="user" varStatus="counter">
-                <li><a><c:out value="${user.login}"/></a></li>
+                <li id = "<c:out value="${user.login}"/>"><a onclick="directMessage('<c:out value="${user.login}"/>')"><c:out value="${user.login}"/></a></li>
             </c:forEach>
         </ul>
     </div>

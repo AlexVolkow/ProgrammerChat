@@ -1,5 +1,6 @@
 package app.service;
 
+import app.chat.message.DirectMessage;
 import app.chat.message.StatusMessage;
 import app.chat.message.ChatMessage;
 import app.dbService.model.User;
@@ -14,6 +15,17 @@ public class Filter {
             if (words.length==2){
                 if (words[0].equals(user.getLogin()) && words[1].equals("joined")){
                     return false;
+                }
+            }
+        }
+        if (message.getStatus()==StatusMessage.DIRECT){
+            if (message instanceof DirectMessage){
+                DirectMessage direct = (DirectMessage) message;
+                if (!(direct.getFrom().equals(user.getLogin()) || direct.getTo().equals(user.getLogin()))){
+                    return false;
+                }
+                if (direct.getFrom().equals(user.getLogin())){
+
                 }
             }
         }

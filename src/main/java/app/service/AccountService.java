@@ -5,6 +5,7 @@ import app.dbService.DBServiceImpl;
 import app.dbService.model.User;
 import app.service.exception.AccountAlreadyRegistered;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.log4j.Logger;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,6 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class AccountService implements UserDetailsService{
     private DBService dbService;
     private static AccountService accountService = new AccountService();
+    private static final Logger logger = Logger.getLogger(AccountService.class);
 
     public static AccountService instance(){
         return accountService;
@@ -51,8 +53,11 @@ public class AccountService implements UserDetailsService{
         String hash = DigestUtils.md5Hex(user.getPassword());
         user.setPassword(hash);
         if (dbService.getUserByEmail(user.getEmail())!=null || dbService.getUserByLogin(user.getLogin())!=null){
-            throw new AccountAlreadyRegistered("Account: "+user+" is already registered");
+            AccountAlreadyRegistered error = new AccountAlreadyRegistered("Account: "+user+" is already registered");
+            logger.error("Account: "+user+" is already registered",error);
+            throw error;
         }
+        logger.info("User "+user+" registered");
         dbService.addUser(user);
     }
 
@@ -60,6 +65,8 @@ public class AccountService implements UserDetailsService{
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user = dbService.getUserByEmail(s);
         if (user==null){
+            logger.error("User by email = "+s+" is not found",
+                    new UsernameNotFoundException("User by email = "+s+" is not found"));
             throw new UsernameNotFoundException("User by email = "+s+" is not found");
         }
         return new org.springframework.security.core.userdetails.User(user.getLogin(),user.getPassword(),
@@ -71,10 +78,12 @@ public class AccountService implements UserDetailsService{
     }
 
     public void removeSession(String sessionId){
+        logger.info("User with session id = "+sessionId+" has left");
         sessionIdToProfile.remove(sessionId);
     }
 
     public void addSession(String sessionId,User user){
+        logger.info("User "+user+" entered");
         sessionIdToProfile.put(sessionId,user);
     }
 
@@ -86,6 +95,10 @@ public class AccountService implements UserDetailsService{
     }
 
     public User getUserBySessionId(String sessionId){
-        return sessionIdToProfile.get(sessionId);
+        if (sessionIdToProfile.containsKey(sessionId)) {
+            return sessionIdToProfile.get(sessionId);
+        }else{
+            return null;
+        }
     }
 }
