@@ -1,6 +1,6 @@
 # ProgrammerChat
 
-Chat for real programmers. Simple and easy.
+Simple chat
 
 # Used technology
 - Java(1.8)
